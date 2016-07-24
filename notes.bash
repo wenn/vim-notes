@@ -1,3 +1,5 @@
+#! /bin/bash
+
 NOTES_ROOT=~/.notes
 ACTION=$1
 TARGET=$2
