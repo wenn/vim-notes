@@ -4,16 +4,17 @@ TARGET=$2
 DIGIT_REGEX="^[0-9]+$"
 
 function notes_default(){
-    LAST_NOTE=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
-    if [[ -z $LAST_NOTE ]]; then
+    last_note=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
+    if [[ -z $last_note ]]; then
         echo "notes.note"
     else
-        echo $LAST_NOTE
+        echo $last_note
     fi
 }
 
 function notes_list() {
     index=0
+
     for fname in $NOTES_ROOT/*.note; do
         let index+=1
         file_name=$(basename $fname)
@@ -33,24 +34,25 @@ function notes_paths(){
 }
 
 function notes_rm(){
+    target=$1
     index=0
-    TARGET=$1
-    if [[ ! -z $TARGET ]]; then
-        if [[ $TARGET =~ $DIGIT_REGEX ]]; then
+
+    if [[ ! -z $target ]]; then
+        if [[ $target =~ $DIGIT_REGEX ]]; then
             for fname in $NOTES_ROOT/*.note; do
                 let index+=1
-                if [[ $TARGET == $index ]]; then
-                    TARGET=$fname
+                if [[ $target == $index ]]; then
+                    target=$fname
                 fi
             done
         else
-            TARGET=$NOTES_ROOT/$TARGET.note
+            target=$NOTES_ROOT/$target.note
         fi
 
-        echo "Remove this note? $TARGET: [y]"
+        echo "Remove this note? $target: [y]"
         read ANSWER
         if [[ $ANSWER == "y" ]]; then
-            rm $TARGET
+            rm $target
         fi
     else
         echo "Usage: notes rm <note name>"
@@ -59,23 +61,24 @@ function notes_rm(){
 }
 
 function notes_view(){
+    target=$1
     index=0
-    TARGET=$1
-    if [[ $TARGET =~ $DIGIT_REGEX ]]; then
+
+    if [[ $target =~ $DIGIT_REGEX ]]; then
         for fname in $NOTES_ROOT/*.note; do
             let index+=1
-            if [[ $TARGET == $index ]]; then
-                TARGET=$(basename $fname)
+            if [[ $target == $index ]]; then
+                target=$(basename $fname)
             fi
         done
-    elif [[ ! -z $TARGET ]]; then
-        TARGET=$TARGET.note
+    elif [[ ! -z $target ]]; then
+        target=$target.note
     else
-        TARGET=$(notes_default)
+        target=$(notes_default)
     fi
 
-    vim $NOTES_ROOT/$TARGET || vi $NOTES_ROOT/$TARGET
-    echo $TARGET > $NOTES_ROOT/.last_note
+    vim $NOTES_ROOT/$target || vi $NOTES_ROOT/$target
+    echo $target > $NOTES_ROOT/.last_note
 }
 
 # List notes
@@ -93,6 +96,6 @@ elif [[ $ACTION == "rm" ]]; then
 
 # View a note ( DEFAULT )
 else
-    TARGET=$ACTION
-    notes_view $TARGET
+    target=$ACTION
+    notes_view $target
 fi
