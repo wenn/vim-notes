@@ -16,7 +16,7 @@ function notes_default(){
 
 function notes_list() {
     until [[ $action == "q" ]]; do
-        echo ""
+        clear
         index=0
         for fname in $NOTES_ROOT/*.note; do
             let index+=1
@@ -26,10 +26,10 @@ function notes_list() {
         done
 
         echo ""
-        echo "To quit: q"
-        echo "To view: <number>"
-        echo "To delete: rm <number>"
+        echo "To quit:   q"
+        echo "To view:   <number>"
         echo "To create: <name>"
+        echo "To delete: rm <number>"
         echo ""
         read ANSWER
 
