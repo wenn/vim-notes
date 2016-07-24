@@ -107,11 +107,11 @@ function main(){
     elif [[ $action == "rm" ]]; then
         notes_rm $target
 
-    # Remove a note
+    # View a note
     elif [[ $action == "view" ]] || [[ $action == "v" ]]; then
         notes_view "view" $target
 
-    # View a note ( DEFAULT )
+    # Edit a note ( DEFAULT )
     elif [[ $action != "q" ]]; then
         target=$action
         notes_view 'edit' $target
