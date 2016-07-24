@@ -97,7 +97,7 @@ elif [[ $ACTION == "rm" ]]; then
     notes_rm $TARGET
 
 # View a note ( DEFAULT )
-else
+elif [[ $ACTION != "q" ]]; then
     target=$ACTION
     notes_view $target
 fi
