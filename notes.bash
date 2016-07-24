@@ -40,10 +40,6 @@ function notes_list() {
     done
 }
 
-function notes_paths(){
-    ls $NOTES_ROOT/*
-}
-
 function notes_rm(){
     target=$1
     index=0
@@ -99,10 +95,6 @@ function main(){
     # List notes
     if [[ $action == "list" ]] || [[ $action == "l" ]]; then
         notes_list
-
-    # List notes file paths
-    elif [[ $action == "paths" ]]; then
-        notes_paths
 
     # Remove a note
     elif [[ $action == "rm" ]]; then
