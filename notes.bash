@@ -37,6 +37,7 @@ function notes_list() {
         target=$(echo $ANSWER | cut -d " " -f 2)
 
         main $action $target
+        clear
     done
 }
 
