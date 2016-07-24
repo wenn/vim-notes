@@ -2,8 +2,15 @@
 
 # DEFAULT_ROOT_CHANGE_ME #
 
-NOTES_ROOT=${DEFAULT_ROOT:-"~/.notes"}
+NOTES_ROOT=${DEFAULT_ROOT:-"$HOME/.notes"}
 DIGIT_REGEX="^[0-9]+$"
+HELP_TEXT=$(cat <<-EOM
+List:   notes list
+View:   notes <v|view> <name|number>
+Edit:   notes <name|number>, leave blank to edit last note.
+Create: notes <name|number>
+Remove: notes <rm> <name|number>
+EOM)
 
 function notes_default(){
     last_note=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
@@ -29,7 +36,7 @@ function notes_list() {
         echo "To quit:   q"
         echo "To edit:   <number>"
         echo "To create: <name>"
-        echo "To delete: rm <number>"
+        echo "To remove: rm <number>"
         echo ""
         read ANSWER
 
@@ -95,6 +102,10 @@ function notes_view(){
     echo $target > $NOTES_ROOT/.last_note
 }
 
+function notes_help(){
+   echo "$HELP_TEXT" | less
+}
+
 function main(){
     action=$1
     target=$2
@@ -106,6 +117,10 @@ function main(){
     # Remove a note
     elif [[ $action == "rm" ]]; then
         notes_rm $target
+
+    # Help
+    elif [[ $action == "help" ]] || [[ $action == "h" ]]; then
+        notes_help
 
     # View a note
     elif [[ $action == "view" ]] || [[ $action == "v" ]]; then
