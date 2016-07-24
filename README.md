@@ -2,7 +2,7 @@
 A simple note cli bash script
 
 ## Usage
-- `notes` view last note
-- `notes <name|number` view note
-- `notes rm <name|number>` delete note
+- `notes` edit last note
+- `notes <name|number` edit a note
+- `notes rm <name|number>` delete a note
 - `notes list|l` list notes
