@@ -3,6 +3,7 @@ A simple note cli bash script
 
 ## Installation
 Avoid using relative or "~/" home operator in paths. Instead use $HOME instead of "~/".
+
 `curl -m 10 -o /tmp/note_install <install url> && bash /tmp/note_install`
 
 ## Usage

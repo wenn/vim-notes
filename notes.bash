@@ -6,8 +6,8 @@ NOTES_ROOT=${DEFAULT_ROOT:-"$HOME/.notes"}
 DIGIT_REGEX="^[0-9]+$"
 HELP_TEXT=$(cat <<-EOM
 List:   notes list
-View:   notes <v|view> <name|number>
-Edit:   notes <name|number>, leave blank to edit last note.
+View:   notes <v|view> <name|number>; prints to stdout
+Edit:   notes <name|number>; leave blank to edit last note.
 Create: notes <name|number>
 Remove: notes <rm> <name|number>
 EOM)
