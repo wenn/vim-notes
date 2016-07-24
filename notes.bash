@@ -27,7 +27,7 @@ function notes_list() {
 
         echo ""
         echo "To quit:   q"
-        echo "To view:   <number>"
+        echo "To edit:   <number>"
         echo "To create: <name>"
         echo "To delete: rm <number>"
         echo ""
@@ -69,7 +69,8 @@ function notes_rm(){
 }
 
 function notes_view(){
-    target=$1
+    action=$1
+    target=$2
     index=0
 
     if [[ $target =~ $DIGIT_REGEX ]]; then
@@ -85,7 +86,12 @@ function notes_view(){
         target=$(notes_default)
     fi
 
-    vim $NOTES_ROOT/$target || vi $NOTES_ROOT/$target
+    if [[ $action == "view" ]]; then
+        cat $NOTES_ROOT/$target
+    else
+        vim $NOTES_ROOT/$target || vi $NOTES_ROOT/$target
+    fi
+
     echo $target > $NOTES_ROOT/.last_note
 }
 
@@ -101,10 +107,14 @@ function main(){
     elif [[ $action == "rm" ]]; then
         notes_rm $target
 
+    # Remove a note
+    elif [[ $action == "view" ]] || [[ $action == "v" ]]; then
+        notes_view "view" $target
+
     # View a note ( DEFAULT )
     elif [[ $action != "q" ]]; then
         target=$action
-        notes_view $target
+        notes_view view $target
     fi
 }
 
