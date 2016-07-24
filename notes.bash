@@ -7,7 +7,7 @@ DIGIT_REGEX="^[0-9]+$"
 
 function notes_default(){
     last_note=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
-    if [[ -z $last_note ]]; then
+    if [[ -z $last_note ]] || [[ ! -f $NOTES_ROOT/$last_note ]]; then
         echo "notes.note"
     else
         echo $last_note
@@ -15,25 +15,29 @@ function notes_default(){
 }
 
 function notes_list() {
-    index=0
+    until [[ $action == "q" ]]; do
+        echo ""
+        index=0
+        for fname in $NOTES_ROOT/*.note; do
+            let index+=1
+            file_name=$(basename $fname)
+            file_name=${file_name%.*}
+            echo -e "$index. $file_name"
+        done
 
-    for fname in $NOTES_ROOT/*.note; do
-        let index+=1
-        file_name=$(basename $fname)
-        file_name=${file_name%.*}
-        echo -e "$index. $file_name"
+        echo ""
+        echo "To quit: q"
+        echo "To view: <number>"
+        echo "To delete: rm <number>"
+        echo "To create: <name>"
+        echo ""
+        read ANSWER
+
+        action=$(echo $ANSWER | cut -d " " -f 1)
+        target=$(echo $ANSWER | cut -d " " -f 2)
+
+        main $action $target
     done
-
-    echo ""
-    echo "To quit: q"
-    echo "To view: <number>"
-    echo "To delete: rm <number>"
-    echo "To create: <name>"
-    echo ""
-    read ANSWER
-
-    ACTION=$(echo $ANSWER | cut -d " " -f 1)
-    TARGET=$(echo $ANSWER | cut -d " " -f 2)
 }
 
 function notes_paths(){
@@ -88,21 +92,27 @@ function notes_view(){
     echo $target > $NOTES_ROOT/.last_note
 }
 
-# List notes
-if [[ $ACTION == "list" ]] || [[ $ACTION == "l" ]]; then
-    notes_list
-fi
+function main(){
+    action=$1
+    target=$2
 
-# List notes file paths
-if [[ $ACTION == "paths" ]]; then
-    notes_paths
+    # List notes
+    if [[ $action == "list" ]] || [[ $action == "l" ]]; then
+        notes_list
 
-# Remove a note
-elif [[ $ACTION == "rm" ]]; then
-    notes_rm $TARGET
+    # List notes file paths
+    elif [[ $action == "paths" ]]; then
+        notes_paths
 
-# View a note ( DEFAULT )
-elif [[ $ACTION != "q" ]]; then
-    target=$ACTION
-    notes_view $target
-fi
+    # Remove a note
+    elif [[ $action == "rm" ]]; then
+        notes_rm $target
+
+    # View a note ( DEFAULT )
+    elif [[ $action != "q" ]]; then
+        target=$action
+        notes_view $target
+    fi
+}
+
+main $ACTION $TARGET
