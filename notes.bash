@@ -1,8 +1,8 @@
 #! /bin/bash
 
-NOTES_ROOT=~/.notes
-ACTION=$1
-TARGET=$2
+# DEFAULT_ROOT_CHANGE_ME #
+
+NOTES_ROOT=${DEFAULT_ROOT:-"~/.notes"}
 DIGIT_REGEX="^[0-9]+$"
 
 function notes_default(){
@@ -114,8 +114,8 @@ function main(){
     # View a note ( DEFAULT )
     elif [[ $action != "q" ]]; then
         target=$action
-        notes_view view $target
+        notes_view 'edit' $target
     fi
 }
 
-main $ACTION $TARGET
+main $1 $2
