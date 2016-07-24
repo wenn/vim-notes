@@ -27,8 +27,13 @@ function notes_list() {
     echo ""
     echo "To quit: q"
     echo "To view: <number>"
+    echo "To delete: rm <number>"
+    echo "To create: <name>"
     echo ""
-    read ACTION
+    read ANSWER
+
+    ACTION=$(echo $ANSWER | cut -d " " -f 1)
+    TARGET=$(echo $ANSWER | cut -d " " -f 2)
 }
 
 function notes_paths(){
