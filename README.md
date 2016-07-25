@@ -4,7 +4,7 @@ A simple note cli bash script
 ## Installation
 Avoid using relative or "~/" home operator in paths. Instead use $HOME instead of "~/".
 
-`bash <(curl -s -m 10 https://raw.githubusercontent.com/wenn/vim-notes/master/install.bash)`
+`bash <(curl -s -m 10 https://github.kdc.capitalone.com/raw/cun824/vim-notes/master/install.bash)`
 
 ## Usage
 - `notes` edit last note
