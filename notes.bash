@@ -5,7 +5,8 @@
 NOTES_ROOT=${DEFAULT_ROOT:-"$HOME/.notes"}
 DIGIT_REGEX="^[0-9]+$"
 HELP_TEXT=$(cat <<-EOM
-List:   notes list
+List:   notes list|l
+Prompt: notes prompt|p
 View:   notes <v|view> <name|number>; prints to stdout
 Edit:   notes <name|number>; leave blank to edit last note.
 Create: notes <name|number>
@@ -48,6 +49,8 @@ function notes_list() {
 
             main $action $target
             clear
+        else
+            action="q"
         fi
     done
 }
