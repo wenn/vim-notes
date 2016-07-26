@@ -22,8 +22,10 @@ function notes_default(){
 }
 
 function notes_list() {
+    as_prompt=$1
+    [[ $as_prompt == "prompt" ]] && clear
+
     until [[ $action == "q" ]]; do
-        clear
         index=0
         for fname in $NOTES_ROOT/*.note; do
             let index+=1
@@ -32,19 +34,21 @@ function notes_list() {
             echo -e "$index. $file_name"
         done
 
-        echo ""
-        echo "To quit:   q"
-        echo "To edit:   <number>"
-        echo "To create: <name>"
-        echo "To remove: rm <number>"
-        echo ""
-        read ANSWER
+        if [[ $as_prompt == "prompt" ]]; then
+            echo ""
+            echo "To quit:   q"
+            echo "To edit:   <number>"
+            echo "To create: <name>"
+            echo "To remove: rm <number>"
+            echo ""
+            read ANSWER
 
-        action=$(echo $ANSWER | cut -d " " -f 1)
-        target=$(echo $ANSWER | cut -d " " -f 2)
+            action=$(echo $ANSWER | cut -d " " -f 1)
+            target=$(echo $ANSWER | cut -d " " -f 2)
 
-        main $action $target
-        clear
+            main $action $target
+            clear
+        fi
     done
 }
 
@@ -113,6 +117,10 @@ function main(){
     # List notes
     if [[ $action == "list" ]] || [[ $action == "l" ]]; then
         notes_list
+
+    # List prompt
+    elif [[ $action == "prompt" ]] || [[ $action == "p" ]]; then
+        notes_list "prompt"
 
     # Remove a note
     elif [[ $action == "rm" ]]; then
