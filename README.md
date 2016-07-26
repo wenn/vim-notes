@@ -13,3 +13,4 @@ Avoid using relative or "~/" home operator in paths. Instead use $HOME instead o
 - `notes view|v <name|number>` cat a note
 - `notes list|l` list notes
 - `notes prompt|p` interactive prompt
+- `notes cat|c` concatenate all notes

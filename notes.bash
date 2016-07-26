@@ -7,6 +7,7 @@ DIGIT_REGEX="^[0-9]+$"
 HELP_TEXT=$(cat <<-EOM
 List:   notes list|l
 Prompt: notes prompt|p
+Cat:    notes cat|c
 View:   notes <v|view> <name|number>; prints to stdout
 Edit:   notes <name|number>; leave blank to edit last note.
 Create: notes <name|number>
@@ -113,6 +114,19 @@ function notes_help(){
    echo "$HELP_TEXT" | less
 }
 
+function notes_aggregate() {
+    for fname in $NOTES_ROOT/*.note; do
+        let index+=1
+        file_name=$(basename $fname)
+        file_name=${file_name%.*}
+        contents+="$index. $file_name \n"
+        contents+=`cat $fname`
+        contents+="\n\n\n=====\n\n\n"
+    done
+
+    echo -e "$contents" | less
+}
+
 function main(){
     action=$1
     target=$2
@@ -124,6 +138,10 @@ function main(){
     # List prompt
     elif [[ $action == "prompt" ]] || [[ $action == "p" ]]; then
         notes_list "prompt"
+
+    # Cat notes
+    elif [[ $action == "cat" ]] || [[ $action == "c" ]]; then
+        notes_aggregate
 
     # Remove a note
     elif [[ $action == "rm" ]]; then

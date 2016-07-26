@@ -1,0 +1,5 @@
+stuff="world"
+
+things+=$stuff
+things+=`cat install.bash`
+echo "$things" | less
