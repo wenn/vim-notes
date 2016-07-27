@@ -114,14 +114,16 @@ function notes_help(){
    echo "$HELP_TEXT" | less
 }
 
-function notes_aggregate() {
+function notes_cat() {
     for fname in $NOTES_ROOT/*.note; do
         let index+=1
         file_name=$(basename $fname)
         file_name=${file_name%.*}
-        contents+="$index. $file_name \n"
+        contents+="\n\n\n==========\n"
+        contents+="$index. $file_name"
+        contents+="\n==========\n\n\n"
+
         contents+=`cat $fname`
-        contents+="\n\n\n=====\n\n\n"
     done
 
     echo -e "$contents" | less
@@ -141,7 +143,7 @@ function main(){
 
     # Cat notes
     elif [[ $action == "cat" ]] || [[ $action == "c" ]]; then
-        notes_aggregate
+        notes_cat
 
     # Remove a note
     elif [[ $action == "rm" ]]; then
