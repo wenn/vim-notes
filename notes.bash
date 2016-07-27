@@ -119,11 +119,12 @@ function notes_cat() {
         let index+=1
         file_name=$(basename $fname)
         file_name=${file_name%.*}
-        contents+="\n\n\n==========\n"
+        contents+="==========\n"
         contents+="$index. $file_name"
-        contents+="\n==========\n\n\n"
+        contents+="\n==========\n\n"
 
         contents+=`cat $fname`
+        contents+="\n\n"
     done
 
     echo -e "$contents" | less
