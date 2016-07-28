@@ -57,7 +57,8 @@ function notes_list() {
 }
 
 function notes_rm(){
-    target=$1
+    action=$1
+    target=$2
     index=0
 
     if [[ ! -z $target ]]; then
@@ -72,10 +73,18 @@ function notes_rm(){
             target=$NOTES_ROOT/$target.note
         fi
 
-        echo "Remove this note? $target: [y]"
-        read ANSWER
-        if [[ $ANSWER == "y" ]]; then
-            rm $target
+        if [[ $action == "rm" ]]; then
+            echo "Remove this note? $target: [y]"
+            read ANSWER
+            if [[ $ANSWER == "y" ]]; then
+                rm $target
+            fi
+        elif [[ $action == "mv" ]]; then
+            echo "Rename note $target to?: (x - cancel)"
+            read ANSWER
+            if [[ $ANSWER != "x" ]]; then
+               mv $target $NOTES_ROOT/$ANSWER
+            fi
         fi
     else
         echo "Usage: notes rm <note name>"
@@ -138,7 +147,7 @@ function main(){
     if [[ $action == "list" ]] || [[ $action == "l" ]]; then
         notes_list
 
-    # List prompt
+    # Interaction Prompt
     elif [[ $action == "prompt" ]] || [[ $action == "p" ]]; then
         notes_list "prompt"
 
@@ -146,9 +155,13 @@ function main(){
     elif [[ $action == "cat" ]] || [[ $action == "c" ]]; then
         notes_cat
 
+    # Rename a note
+    elif [[ $action == "mv" ]]; then
+        notes_rm "mv" $target
+
     # Remove a note
     elif [[ $action == "rm" ]]; then
-        notes_rm $target
+        notes_rm "rm" $target
 
     # Help
     elif [[ $action == "help" ]] || [[ $action == "h" ]]; then
