@@ -12,6 +12,7 @@ View:   notes <v|view> <name|number>; prints to stdout
 Edit:   notes <name|number>; leave blank to edit last note.
 Create: notes <name|number>
 Remove: notes <rm> <name|number>
+Rename: notes <mv> <name|number>
 EOM)
 
 function notes_default(){
@@ -42,6 +43,7 @@ function notes_list() {
             echo "To edit:   <number>"
             echo "To create: <name>"
             echo "To remove: rm <number>"
+            echo "To rename: mv <number>"
             echo ""
             read ANSWER
 
@@ -56,7 +58,7 @@ function notes_list() {
     done
 }
 
-function notes_rm(){
+function notes_rm_or_mv(){
     action=$1
     target=$2
     index=0
@@ -83,7 +85,7 @@ function notes_rm(){
             echo "Rename note $target to?: (x - cancel)"
             read ANSWER
             if [[ $ANSWER != "x" ]]; then
-               mv $target $NOTES_ROOT/$ANSWER
+               mv $target $NOTES_ROOT/$ANSWER.note
             fi
         fi
     else
@@ -157,11 +159,11 @@ function main(){
 
     # Rename a note
     elif [[ $action == "mv" ]]; then
-        notes_rm "mv" $target
+        notes_rm_or_mv "mv" $target
 
     # Remove a note
     elif [[ $action == "rm" ]]; then
-        notes_rm "rm" $target
+        notes_rm_or_mv "rm" $target
 
     # Help
     elif [[ $action == "help" ]] || [[ $action == "h" ]]; then
