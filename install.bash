@@ -21,7 +21,7 @@ fi
 mkdir -p $root_path
 touch $root_path/.last_note
 
-curl -m 10 -o /tmp/notes https://github.kdc.capitalone.com/raw/cun824/vim-notes/master/notes.bash
+curl -m 10 -o /tmp/notes https://raw.githubusercontent.com/wenn/vim-notes/master/notes.bash
 sed -i "" "s|# DEFAULT_ROOT_CHANGE_ME #|DEFAULT_ROOT=$root_path|g" /tmp/notes
 
 mv /tmp/notes $install_path
