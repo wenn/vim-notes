@@ -1,4 +1,4 @@
-# Simple Vim Notes
+# Vim Notes
 Manage notes with vim.
 
 ## Installation
