@@ -1,5 +1,5 @@
 # Simple Vim Notes
-A simple note cli bash script
+Manage notes with vim.
 
 ## Installation
 Avoid using relative or "~/" home operator in paths. Instead use $HOME instead of "~/".
