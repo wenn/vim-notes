@@ -65,9 +65,8 @@ gitignore=$(cat <<-EOF
 .error_log
 )
 
-touch $root_path/.config
-echo -e "$config_content" > $root_path/.config
-echo -e "$gitignore" > $root_path/.gitignore
+[[ ! -f $root_path/.config ]] && echo -e "$config_content" > $root_path/.config
+[[ ! -f $root_path/.gitignore ]] && echo -e "$gitignore" > $root_path/.gitignore
 
 install_script "notes-sync" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes-sync.bash"
 

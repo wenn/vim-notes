@@ -93,7 +93,7 @@ function notes_rm_or_mv(){
         exit 1
     fi
 
-    bash notes-sync
+    notes-sync
 }
 
 function notes_view(){
@@ -118,10 +118,10 @@ function notes_view(){
         cat $NOTES_ROOT/$target
     else
         vim $NOTES_ROOT/$target || vi $NOTES_ROOT/$target
+        notes-sync
     fi
 
     echo $target > $NOTES_ROOT/.last_note
-    bash notes-sync
 }
 
 function notes_help(){
