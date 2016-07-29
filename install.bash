@@ -60,6 +60,7 @@ NOTES_GIT_URL=
 EOF)
 
 gitignore=$(cat <<-EOF
+.swp
 .config
 .last_note
 .error_log
