@@ -12,7 +12,7 @@ View:   notes <v|view> <name|number>; prints to stdout
 Edit:   notes <name|number>; leave blank to edit last note.
 Create: notes <name|number>
 Remove: notes <rm> <name|number>
-Rename: notes <mv> <name|number>
+Rename: notes <mv> <name|number> <new name>
 EOM)
 
 function notes_default(){
@@ -40,10 +40,10 @@ function notes_list() {
         if [[ $as_prompt == "prompt" ]]; then
             echo ""
             echo "To quit:   q"
-            echo "To edit:   <number>"
+            echo "To edit:   <number|name>"
             echo "To create: <name>"
-            echo "To remove: rm <number>"
-            echo "To rename: mv <number>"
+            echo "To remove: rm <number|name>"
+            echo "To rename: mv <number|name> <new name>"
             echo ""
             read ANSWER
 
@@ -61,6 +61,7 @@ function notes_list() {
 function notes_rm_or_mv(){
     action=$1
     target=$2
+    new_name=$3
     index=0
 
     if [[ ! -z $target ]]; then
@@ -82,11 +83,7 @@ function notes_rm_or_mv(){
                 rm $target
             fi
         elif [[ $action == "mv" ]]; then
-            echo "Rename note $target to?: (x - cancel)"
-            read ANSWER
-            if [[ $ANSWER != "x" ]]; then
-               mv $target $NOTES_ROOT/$ANSWER.note
-            fi
+           mv $target $NOTES_ROOT/$new_name.note
         fi
     else
         echo "Usage: notes rm <note name>"
@@ -162,7 +159,8 @@ function main(){
 
     # Rename a note
     elif [[ $action == "mv" ]]; then
-        notes_rm_or_mv "mv" $target
+        new_name=$3
+        notes_rm_or_mv "mv" $target $new_name
 
     # Remove a note
     elif [[ $action == "rm" ]]; then
@@ -183,4 +181,4 @@ function main(){
     fi
 }
 
-main $1 $2
+main $1 $2 $3
