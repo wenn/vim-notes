@@ -121,7 +121,7 @@ function notes_view(){
     fi
 
     echo $target > $NOTES_ROOT/.last_note
-    bash note-sync
+    bash notes-sync
 }
 
 function notes_help(){
