@@ -43,6 +43,7 @@ function install_script() {
 
 mkdir -p $root_path
 touch $root_path/.last_note
+touch $root_path/.error_log
 
 install_script "notes" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes.bash"
 
@@ -61,6 +62,7 @@ EOF)
 gitignore=$(cat <<-EOF
 .config
 .last_note
+.error_log
 )
 
 touch $root_path/.config
@@ -70,4 +72,4 @@ echo -e "$gitignore" > $root_path/.gitignore
 install_script "notes-sync" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes-sync.bash"
 
 cd $root_path
-git init 2>/dev/null
+git init 2>>$root_path/.error_log
