@@ -5,7 +5,7 @@ NOTES_ROOT=${DEFAULT_ROOT:-"$HOME/.notes"}
 source $NOTES_ROOT/.config
 
 cd $NOTES_ROOT
-if [[ ! -z $(git remote -vv) ]]; then
+if [[ -z $(git remote -vv) ]]; then
     git remote add origin $NOTES_GIT_URL 2>/dev/null
 fi
 
