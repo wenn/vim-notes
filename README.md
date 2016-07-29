@@ -3,6 +3,7 @@ Manage notes with vim.
 
 ## Installation
 `bash <(curl -s -m 10 https://raw.githubusercontent.com/wenn/vim-notes/master/install.bash)`
+
 _Avoid using relative or "~/" home operator in paths. Instead use $HOME instead of "~/"_
 
 ## Usage
