@@ -3,7 +3,7 @@
 install_path="/usr/local/bin/"
 root_path="$HOME/.notes"
 
-read -p "Install notes to $install_path: [y] or enter absolute path: " answer
+read -p "Install scripts to $install_path: [y] or enter absolute path: " answer
 if [[ $answer != "y" ]]; then
     install_path=$answer
 fi
@@ -22,16 +22,16 @@ function install_script() {
     script_name=$1
     script_url=$2
     tmp_path="/tmp/$script_name"
-    install_path="$install_path/$script_name"
+    script_path="$install_path/$script_name"
 
     curl -m 10 -o $tmp_path  $script_url
 
     [[ ! -f $tmp_path ]] && echo "Fail to download script" && kill -INT $$
     sed -i "" "s|# DEFAULT_ROOT_CHANGE_ME #|DEFAULT_ROOT=$root_path|g" $tmp_path
 
-    mv $tmp_path $install_path
-    if [[ -f $install_path ]]; then
-        chmod a+x $install_path
+    mv $tmp_path $script_path
+    if [[ -f $script_path ]]; then
+        chmod a+x $script_path
     else
         echo "Fail to install"
     fi
