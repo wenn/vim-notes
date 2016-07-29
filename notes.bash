@@ -57,6 +57,8 @@ function notes_list() {
             action="q"
         fi
     done
+
+    notes-sync
 }
 
 function notes_rm_or_mv(){
@@ -90,6 +92,8 @@ function notes_rm_or_mv(){
         echo "Usage: notes rm <note name>"
         exit 1
     fi
+
+    notes-sync
 }
 
 function notes_view(){
@@ -179,8 +183,6 @@ function main(){
         target=$action
         notes_view 'edit' $target
     fi
-
-    notes-sync
 }
 
 main $1 $2 $3
