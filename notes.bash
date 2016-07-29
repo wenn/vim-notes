@@ -92,6 +92,8 @@ function notes_rm_or_mv(){
         echo "Usage: notes rm <note name>"
         exit 1
     fi
+
+    bash notes-sync
 }
 
 function notes_view(){
@@ -119,6 +121,7 @@ function notes_view(){
     fi
 
     echo $target > $NOTES_ROOT/.last_note
+    bash note-sync
 }
 
 function notes_help(){
