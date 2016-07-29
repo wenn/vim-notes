@@ -49,8 +49,9 @@ function notes_list() {
 
             action=$(echo $ANSWER | cut -d " " -f 1)
             target=$(echo $ANSWER | cut -d " " -f 2)
+            new_name=$(echo $ANSWER | cut -d " " -f 3)
 
-            main $action $target
+            main $action $target $new_name
             clear
         else
             action="q"
