@@ -12,10 +12,12 @@ if [[ ! -z $NOTES_GIT_URL ]]; then
     fi
 
     (
-        git fetch origin 2>>$NOTES_ROOT/.error_log 1>&2 && \
+        git gc --prune=now 2>>$NOTES_ROOT/.error_log 1>&2 && \
+        git remote prune origin 2>>$NOTES_ROOT/.error_log 1>&2 && \
+        git fetch 2>>$NOTES_ROOT/.error_log 1>&2 && \
         git add -A 2>>$NOTES_ROOT/.error_log 1>&2 && \
         git commit -m "Syncing..." 2>>$NOTES_ROOT/.error_log 1>&2 && \
         git rebase origin/master 2>>$NOTES_ROOT/.error_log 1>&2 && \
-        git push -f origin master 2>>$NOTES_ROOT/.error_log 1>&2
+        git push origin master 2>>$NOTES_ROOT/.error_log 1>&2
     ) &
 fi
