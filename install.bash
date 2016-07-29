@@ -58,8 +58,14 @@ config_content=$(cat <<-EOF
 # NOTES_GIT_URL=<change me>
 EOF)
 
+gitignore=$(cat <<-EOF
+.config
+.last_note
+)
+
 touch $root_path/.config
 echo -e "$config_content" > $root_path/.config
+echo -e "$gitignore" > $root_path/.gitignore
 
 install_script "notes-sync" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes-sync.bash"
 
