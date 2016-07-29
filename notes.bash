@@ -90,8 +90,6 @@ function notes_rm_or_mv(){
         echo "Usage: notes rm <note name>"
         exit 1
     fi
-
-    notes-sync
 }
 
 function notes_view(){
@@ -116,7 +114,6 @@ function notes_view(){
         cat $NOTES_ROOT/$target
     else
         vim $NOTES_ROOT/$target || vi $NOTES_ROOT/$target
-        notes-sync
     fi
 
     echo $target > $NOTES_ROOT/.last_note
@@ -143,6 +140,8 @@ function notes_cat() {
 }
 
 function main(){
+    notes-sync
+
     action=$1
     target=$2
 
@@ -180,6 +179,8 @@ function main(){
         target=$action
         notes_view 'edit' $target
     fi
+
+    notes-sync
 }
 
 main $1 $2 $3
