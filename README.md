@@ -17,4 +17,10 @@ Avoid using relative or "~/" home operator in paths. Instead use $HOME instead o
 - `notes cat|c` concatenate all notes
 
 ## Git Sync
-You can have notes sync between machines
+Sync notes between machines with Git.
+
+1. Create a notes store repo on a Git host ( Github or Bitbucket )
+2. Make sure you have ssh key store on the Git host [Using git:// protocol](https://help.github.com/articles/generating-an-ssh-key/)
+3. Copy repo's ssh url, e.g: git@bitbucket.org:wenn/vim-notes.git
+4. Update variable NOTES\_GIT\_URL in $NOTES\_ROOT\_PATH/.config
+5. Run `note-sync`
