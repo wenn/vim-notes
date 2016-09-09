@@ -29,4 +29,4 @@ Sync notes between machines with Git.
 #### Enable Note Sync
 
 1. Update variable **NOTES\_GIT\_URL** in **$NOTES\_ROOT\_PATH/.config**: ~/.notes/.confg
-2. Run `note-sync`
+2. Run `notes-sync`
