@@ -18,7 +18,7 @@ EOM)
 function notes_default(){
     last_note=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
     if [[ -z $last_note ]] || [[ ! -f $NOTES_ROOT/$last_note ]]; then
-        echo "notes.note"
+        echo "notes.txt"
     else
         echo $last_note
     fi
@@ -30,7 +30,7 @@ function notes_list() {
 
     until [[ $action == "q" ]]; do
         index=0
-        for fname in $NOTES_ROOT/*.note; do
+        for fname in $NOTES_ROOT/*.txt; do
             let index+=1
             file_name=$(basename $fname)
             file_name=${file_name%.*}
@@ -69,14 +69,14 @@ function notes_rm_or_mv(){
 
     if [[ ! -z $target ]]; then
         if [[ $target =~ $DIGIT_REGEX ]]; then
-            for fname in $NOTES_ROOT/*.note; do
+            for fname in $NOTES_ROOT/*.txt; do
                 let index+=1
                 if [[ $target == $index ]]; then
                     target=$fname
                 fi
             done
         else
-            target=$NOTES_ROOT/$target.note
+            target=$NOTES_ROOT/$target.txt
         fi
 
         if [[ $action == "rm" ]]; then
@@ -86,7 +86,7 @@ function notes_rm_or_mv(){
                 rm $target
             fi
         elif [[ $action == "mv" ]]; then
-           mv $target $NOTES_ROOT/$new_name.note
+           mv $target $NOTES_ROOT/$new_name.txt
         fi
     else
         echo "Usage: notes rm <note name>"
@@ -102,14 +102,14 @@ function notes_view(){
     index=0
 
     if [[ $target =~ $DIGIT_REGEX ]]; then
-        for fname in $NOTES_ROOT/*.note; do
+        for fname in $NOTES_ROOT/*.txt; do
             let index+=1
             if [[ $target == $index ]]; then
                 target=$(basename $fname)
             fi
         done
     elif [[ ! -z $target ]]; then
-        target=$target.note
+        target=$target.txt
     else
         target=$(notes_default)
     fi
@@ -128,7 +128,7 @@ function notes_help(){
 }
 
 function notes_cat() {
-    for fname in $NOTES_ROOT/*.note; do
+    for fname in $NOTES_ROOT/*.txt; do
         let index+=1
         file_name=$(basename $fname)
         file_name=${file_name%.*}
