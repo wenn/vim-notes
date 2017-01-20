@@ -1,4 +1,13 @@
-#! /bin/bash
+#! /usr/bin/env bash
+
+if [[ $1 == "local" ]]; then
+    local_flag=true
+    notes_script="./notes.bash"
+    notes_sync_script="./notes-sync.bash"
+else
+    notes_script="https://raw.githubusercontent.com/wenn/vim-notes/master/notes.bash"
+    notes_sync_script="https://raw.githubusercontent.com/wenn/vim-notes/master/notes-sync.bash"
+fi
 
 install_path="/usr/local/bin/"
 root_path="$HOME/.notes"
@@ -20,11 +29,16 @@ fi
 
 function install_script() {
     script_name=$1
-    script_url=$2
+    script_uri=$2
     tmp_path="/tmp/$script_name"
     script_path="$install_path/$script_name"
 
-    curl -m 10 -o $tmp_path  $script_url
+    if $local_flag; then
+        echo "Installing from project $script_uri $tmp_path"
+        cp $script_uri $tmp_path
+    else
+        curl -m 10 -o $tmp_path  $script_uri
+    fi
 
     [[ ! -f $tmp_path ]] && echo "Fail to download script" && kill -INT $$
     sed -i "" "s|# DEFAULT_ROOT_CHANGE_ME #|DEFAULT_ROOT=$root_path|g" $tmp_path
@@ -45,7 +59,7 @@ mkdir -p $root_path
 touch $root_path/.last_note
 touch $root_path/.error_log
 
-install_script "notes" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes.bash"
+install_script "notes" $notes_script
 
 ################
 # Install Sync #
@@ -69,7 +83,7 @@ gitignore=$(cat <<-EOF
 [[ ! -f $root_path/.config ]] && echo -e "$config_content" > $root_path/.config
 [[ ! -f $root_path/.gitignore ]] && echo -e "$gitignore" > $root_path/.gitignore
 
-install_script "notes-sync" "https://raw.githubusercontent.com/wenn/vim-notes/master/notes-sync.bash"
+install_script "notes-sync" $notes_sync_script
 
 cd $root_path
 git init 2>>$root_path/.error_log

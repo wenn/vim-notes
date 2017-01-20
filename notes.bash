@@ -1,18 +1,13 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 # DEFAULT_ROOT_CHANGE_ME #
 
 NOTES_ROOT=${DEFAULT_ROOT:-"$HOME/.notes"}
 DIGIT_REGEX="^[0-9]+$"
 HELP_TEXT=$(cat <<-EOM
-List:   notes list|l
-Prompt: notes prompt|p
+Prompt: notes
+Last:   notes last|l
 Cat:    notes cat|c
-View:   notes <v|view> <name|number>; prints to stdout
-Edit:   notes <name|number>; leave blank to edit last note.
-Create: notes <name|number>
-Remove: notes <rm> <name|number>
-Rename: notes <mv> <name|number> <new name>
 EOM)
 
 function notes_default(){
@@ -24,9 +19,8 @@ function notes_default(){
     fi
 }
 
-function notes_list() {
-    as_prompt=$1
-    [[ $as_prompt == "prompt" ]] && clear
+function notes_prompt() {
+    clear
 
     until [[ $action == "q" ]]; do
         index=0
@@ -37,25 +31,38 @@ function notes_list() {
             echo -e "$index. $file_name"
         done
 
-        if [[ $as_prompt == "prompt" ]]; then
-            echo ""
-            echo "To quit:   q"
-            echo "To edit:   <number|name>"
-            echo "To create: <name>"
-            echo "To remove: rm <number|name>"
-            echo "To rename: mv <number|name> <new name>"
-            echo ""
-            read ANSWER
+        echo ""
+        echo "To quit:   q"
+        echo "To edit:   <number>"
+        echo "To create: <name>"
+        echo "To remove: rm <number|name>"
+        echo "To rename: mv <number|name> <new name>"
+        echo ""
+        read ANSWER
 
-            action=$(echo $ANSWER | cut -d " " -f 1)
-            target=$(echo $ANSWER | cut -d " " -f 2)
-            new_name=$(echo $ANSWER | cut -d " " -f 3)
+        action=$(echo $ANSWER | cut -d " " -f 1)
+        target=$(echo $ANSWER | cut -d " " -f 2)
+        new_name=$(echo $ANSWER | cut -d " " -f 3)
 
-            main $action $target $new_name
-            clear
-        else
-            action="q"
+        # edit a note
+        if [[ $action =~ $DIGIT_REGEX ]]; then
+            notes_view "edit" $action
+
+        # Rename a note
+        elif [[ $action == "mv" ]]; then
+            new_name=$3
+            notes_rm_or_mv "mv" $target $new_name
+
+        # Remove a note
+        elif [[ $action == "rm" ]]; then
+            notes_rm_or_mv "rm" $target
+
+        # create a note
+        elif [[ $action != "q" ]]; then
+            notes_view "edit" $target
         fi
+
+        clear
     done
 
     notes-sync
@@ -149,26 +156,14 @@ function main(){
     action=$1
     target=$2
 
-    # List notes
-    if [[ $action == "list" ]] || [[ $action == "l" ]]; then
-        notes_list
 
-    # Interaction Prompt
-    elif [[ $action == "prompt" ]] || [[ $action == "p" ]]; then
-        notes_list "prompt"
+    # Last notes
+    if [[ $action == "last" ]] || [[ $action == "l" ]]; then
+        notes_view
 
     # Cat notes
     elif [[ $action == "cat" ]] || [[ $action == "c" ]]; then
         notes_cat
-
-    # Rename a note
-    elif [[ $action == "mv" ]]; then
-        new_name=$3
-        notes_rm_or_mv "mv" $target $new_name
-
-    # Remove a note
-    elif [[ $action == "rm" ]]; then
-        notes_rm_or_mv "rm" $target
 
     # Help
     elif [[ $action == "help" ]] || [[ $action == "h" ]]; then
@@ -177,11 +172,8 @@ function main(){
     # View a note
     elif [[ $action == "view" ]] || [[ $action == "v" ]]; then
         notes_view "view" $target
-
-    # Edit a note ( DEFAULT )
-    elif [[ $action != "q" ]]; then
-        target=$action
-        notes_view 'edit' $target
+    else
+        notes_prompt
     fi
 }
 
