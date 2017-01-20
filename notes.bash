@@ -12,6 +12,7 @@ EOM)
 
 function notes_default(){
     last_note=$(cat $NOTES_ROOT/.last_note 2>/dev/null)
+
     if [[ -z $last_note ]] || [[ ! -f $NOTES_ROOT/$last_note ]]; then
         echo "notes.txt"
     else
@@ -20,6 +21,9 @@ function notes_default(){
 }
 
 function notes_prompt() {
+    action=$1
+    target=$2
+
     clear
 
     until [[ $action == "q" ]]; do
@@ -28,13 +32,22 @@ function notes_prompt() {
             let index+=1
             file_name=$(basename $fname)
             file_name=${file_name%.*}
-            echo -e "$index. $file_name"
+
+            if [[ $action == "search" ]]; then
+                regex=.*$(echo $target | fold -w1 | tr '\n' ' ' | sed 's| |.*|g')
+                if [[ $file_name =~ $regex ]]; then
+                    echo -e "$index. $file_name"
+                fi
+            else
+                echo -e "$index. $file_name"
+            fi
         done
 
         echo ""
         echo "To quit:   q"
         echo "To edit:   <number>"
         echo "To create: <name>"
+        echo "To search: s <name> | hit <enter> to reset"
         echo "To remove: rm <number|name>"
         echo "To rename: mv <number|name> <new name>"
         echo ""
@@ -57,9 +70,17 @@ function notes_prompt() {
         elif [[ $action == "rm" ]]; then
             notes_rm_or_mv "rm" $target
 
+        # Search for a note
+        elif [[ $action == "s" ]]; then
+            notes_prompt "search" $target
+
         # create a note
-        elif [[ $action != "q" ]]; then
+        elif [[ $action != "q" && ! -z $action ]]; then
             notes_view "edit" $target
+
+        # reset
+        elif [[ -z $action ]]; then
+            notes_prompt
         fi
 
         clear

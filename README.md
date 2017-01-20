@@ -7,13 +7,9 @@ Manage notes with vim.
 _Avoid using relative or "~/" home operator in paths. Instead use $HOME instead of "~/"_
 
 ## Usage
-- `notes` edit last note
-- `notes <name|number>` edit a note
-- `notes rm <name|number>` delete a note
-- `notes mv <name|number> <new name>` rename a note
+- `notes` open notes prompt
 - `notes view|v <name|number>` cat a note
-- `notes list|l` list notes
-- `notes prompt|p` interactive prompt
+- `notes last|l` edit last note
 - `notes cat|c` concatenate all notes
 
 ## Git Sync
